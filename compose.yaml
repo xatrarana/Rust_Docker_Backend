@@ -1,0 +1,27 @@
+services:
+  rustapp:
+    container_name: rustapp
+    image: xatrarana/rustapp:latest
+    build:
+      context: ./backend
+      dockerfile: rust.Dockerfile
+      args:
+        DATABASE_URL: postgres://postgres:postgres@db:5432/postgres
+    ports:
+      - 5000:5000
+    depends_on:
+      - db
+  db:
+    container_name: db
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    
+volumes:
+  pgdata: {}
